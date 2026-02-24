@@ -12,30 +12,20 @@ const database = new Databases(client);
 
 export const updateSearchCount = async (searchTerm , movie) => {
     try{
-        const result = await database.listDocuments({
-            databaseId: db_id,
-            collectionId: collection_id,
-            queries: [Query.equal('searchTerm' , searchTerm)]
-        });
+        const result = await database.listDocuments(db_id, collection_id, [
+            Query.equal('searchTerm' , searchTerm)
+        ]);
         if (result.documents.length > 0){
             const doc = result.documents[0];
-            await database.updateDocument({
-                databaseId: db_id,
-                collectionId: collection_id,
-                documentId: doc.$id,
-                data: { count: doc.count + 1 }
+            await database.updateDocument(db_id, collection_id, doc.$id, {
+                count: doc.count + 1
             });
         }else{
-            await database.createDocument({
-                databaseId: db_id,
-                collectionId: collection_id,
-                documentId: ID.unique(),
-                data: {
-                    searchTerm,
-                    count: 1,
-                    movie_id: movie.id,
-                    poster_url: `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                }
+            await database.createDocument(db_id, collection_id, ID.unique(), {
+                searchTerm,
+                count: 1,
+                movie_id: movie.id,
+                poster_url: `https://image.tmdb.org/t/p/w500${movie.poster_path}`
             });
         }
     }catch(error){
