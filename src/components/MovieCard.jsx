@@ -16,7 +16,7 @@ const MovieCard = ( { movie: { title , vote_average , poster_path , release_date
             <p></p> 
             <p className='year'> { release_date ? release_date.split('-')[0] : 'N/A' } </p>
           </div>
-        </div>
+        </div> 
       </div>
     </div>
   )
